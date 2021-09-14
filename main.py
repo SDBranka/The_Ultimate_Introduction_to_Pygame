@@ -41,12 +41,18 @@ text_surface = test_font.render(text_surface_text, text_surface_anti_aliasing, t
 # create snail character(surface)
 snail_surface = pygame.image.load("img/snail/snail1.png").convert_alpha()
 snail_pos_x = 600
-snail_pos_y = 250
+snail_pos_y = 300
+# create snail rectangle that is same size as snail_surface
+snail_rect = snail_surface.get_rect(midbottom = (snail_pos_x, snail_pos_y))
+
+
 
 # create player character(surface)
 player_surface = pygame.image.load("img/player/player_walk_1.png").convert_alpha()
 player_pos_x = 80
-player_pos_y = 200
+player_pos_y = 300
+# create player rectangle that is same size as player_surface
+player_rect = player_surface.get_rect(midbottom = (player_pos_x, player_pos_y))
 
 # game loop
 while True:
@@ -77,13 +83,13 @@ while True:
     screen.blit(text_surface, (text_pos_x, text_pos_y))
 
     # display snail/move position
-    snail_pos_x -= 3
-    if snail_pos_x < -90:
-        snail_pos_x = 800
-    screen.blit(snail_surface, (snail_pos_x, snail_pos_y))
+    snail_rect.left -= 3
+    if snail_rect.left < -90:
+        snail_rect.left = 800
+    screen.blit(snail_surface, snail_rect)
 
     # display player
-    screen.blit(player_surface, (player_pos_x, player_pos_y))
+    screen.blit(player_surface, player_rect )
 
 
     pygame.display.update()
