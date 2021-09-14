@@ -43,6 +43,10 @@ snail_surface = pygame.image.load("img/snail/snail1.png").convert_alpha()
 snail_pos_x = 600
 snail_pos_y = 250
 
+# create player character(surface)
+player_surface = pygame.image.load("img/player/player_walk_1.png").convert_alpha()
+player_pos_x = 80
+player_pos_y = 200
 
 # game loop
 while True:
@@ -77,6 +81,9 @@ while True:
     if snail_pos_x < -90:
         snail_pos_x = 800
     screen.blit(snail_surface, (snail_pos_x, snail_pos_y))
+
+    # display player
+    screen.blit(player_surface, (player_pos_x, player_pos_y))
 
 
     pygame.display.update()
