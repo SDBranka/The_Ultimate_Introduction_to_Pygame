@@ -15,11 +15,16 @@ pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 
 # create a surface with a plain color
-ts_width = 100
-ts_height = 200
-test_surface = pygame.Surface((ts_width, ts_height))
-test_surface.fill('Red')
+# ts_width = 100
+# ts_height = 200
+# test_surface = pygame.Surface((ts_width, ts_height))
+# test_surface.fill('Red')
 
+# create a surface with an image
+sky_surface = pygame.image.load('img/Sky.png')
+
+# create a ground surface with an image
+ground_surface = pygame.image.load('img/ground.png')
 
 # game loop
 while True:
@@ -30,9 +35,19 @@ while True:
             exit()
 
     # display test_surface
-    ts_pos_x = 0
-    ts_pos_y = 0
-    screen.blit(test_surface, (ts_pos_x, ts_pos_y))
+    # ts_pos_x = 200
+    # ts_pos_y = 100
+    # screen.blit(test_surface, (ts_pos_x, ts_pos_y))
+
+    # display sky_surface
+    ss_pos_x = 0
+    ss_pos_y = 0
+    screen.blit(sky_surface, (ss_pos_x, ss_pos_y))
+
+    # display ground_surface
+    gs_pos_x = 0
+    gs_pos_y = 300
+    screen.blit(ground_surface, (gs_pos_x, gs_pos_y))
 
     pygame.display.update()
     # sets so that while True loop should not run faster than framerate_ceiling times per second
