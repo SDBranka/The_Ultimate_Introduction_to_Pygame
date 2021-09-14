@@ -101,12 +101,12 @@ while True:
         
         # make player jump using space bar
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
                 player_gravity = -20
 
         # make player jump if player is clicked (1:43:15)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if player_rect.collidepoint(event.pos):
+            if player_rect.collidepoint(event.pos) and player_rect.bottom >= 300:
                 player_gravity = -20
 
 
@@ -193,6 +193,13 @@ while True:
     # ellipse_width = 100
     # ellipse_height = 100
     # pygame.draw.ellipse(surface_to_ellipse_line_on, ellipse_color, pygame.Rect(ellipse_x, ellipse_y, ellipse_width, ellipse_height))
+
+
+    # player vs snail collision
+    if snail_rect.colliderect(player_rect):
+        pygame.quit()
+        exit()
+
 
 
     pygame.display.update()
