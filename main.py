@@ -15,7 +15,10 @@ pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 
 # create a surface with a plain color
-test_surface = pygame.Surface()
+ts_width = 100
+ts_height = 200
+test_surface = pygame.Surface((ts_width, ts_height))
+test_surface.fill('Red')
 
 
 # game loop
@@ -26,7 +29,24 @@ while True:
             pygame.quit()
             exit()
 
+    # display test_surface
+    ts_pos_x = 0
+    ts_pos_y = 0
+    screen.blit(test_surface, (ts_pos_x, ts_pos_y))
+
     pygame.display.update()
     # sets so that while True loop should not run faster than framerate_ceiling times per second
     framerate_ceiling = 60
     clock.tick(framerate_ceiling)
+
+
+
+
+
+
+
+
+
+
+
+
