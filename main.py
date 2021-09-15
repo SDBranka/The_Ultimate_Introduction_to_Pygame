@@ -12,7 +12,7 @@ def display_score():
     screen.blit(score_surface, score_rect)
     return current_time
 
-# moves obstacles and deletes obstacles that have left the screen
+# determines obstacle type, moves obstacles, and deletes obstacles that have left the screen
 def obstacle_movement(obstacle_list):
     if obstacle_list:
         for obstacle_rect in obstacle_list:
@@ -31,6 +31,15 @@ def obstacle_movement(obstacle_list):
 
         return obstacle_list
     return []
+
+# determines if collision between obstacle and play occurs
+def collisions(player, obstacles):
+    if obstacles:
+        for obst_rect in obstacles:
+            if player.colliderect(obst_rect):
+                return False
+    return True
+
 
 # initialize pygame
 pygame.init()
@@ -238,17 +247,17 @@ while True:
         # obstacle movement
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
-
-
         # apply player gravity physics
         player_gravity +=1 
         player_rect.y += player_gravity
         # create floor as barrier
         if player_rect.bottom >= 300:
             player_rect.bottom = 300
-
         # display player
         screen.blit(player_surface, player_rect)
+
+        # collisions
+        game_active = collisions(player_rect, obstacle_rect_list)
 
         # stores pressed keys into variable like a dictionary, if space bar is pushed print jump
         # keys = pygame.key.get_pressed()
@@ -296,6 +305,15 @@ while True:
         # if snail_rect.colliderect(player_rect):
         #     game_active = False
     else:
+        # clear all existing enemies
+        obstacle_rect_list.clear()
+        # return player_rect to start position
+        player_rect.midbottom = (80, 300)
+        player_gravity = 0
+        
+
+
+        # draw screen
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
         score_msg = test_font.render(f"Your score: {math.floor(score)}", False, (111, 196, 169))
