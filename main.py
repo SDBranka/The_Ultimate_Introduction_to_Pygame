@@ -40,6 +40,25 @@ def collisions(player, obstacles):
                 return False
     return True
 
+# player animation; determine which image to draw to surface
+def player_animation():
+    global player_surface, player_index
+
+    # display jump surface when player is in the air
+    if player_rect.bottom < 300:
+        player_surface = player_jump
+    else:
+        # increasing the index by small increments extends how many frames an index position is displayed for
+        player_index += 0.1
+        if player_index >= len(player_walk):
+            player_index = 0
+        player_surface = player_walk[int(player_index)]
+
+
+    # play walking animation if the player is on the floor    
+
+
+
 
 # initialize pygame
 pygame.init()
@@ -110,7 +129,18 @@ obstacle_rect_list = []
 
 
 # create player character(surface)
-player_surface = pygame.image.load("img/player/player_walk_1.png").convert_alpha()
+# player_surface = pygame.image.load("img/player/player_walk_1.png").convert_alpha()
+# animating the player
+player_walk_1 = pygame.image.load("img/player/player_walk_1.png").convert_alpha()
+player_walk_2 = pygame.image.load("img/player/player_walk_2.png").convert_alpha()
+# list containing the two walk animation pics controlled by player_index
+player_walk = [player_walk_1, player_walk_2]
+player_index = 0
+player_jump = pygame.image.load("img/player/jump.png").convert_alpha()
+# sets the player image to player_walk_1
+player_surface = player_walk[player_index]
+
+
 player_pos_x = 80
 player_pos_y = 300
 # create player rectangle that is same size as player_surface
@@ -253,6 +283,8 @@ while True:
         # create floor as barrier
         if player_rect.bottom >= 300:
             player_rect.bottom = 300
+        # run player_animation to determine which image to show
+        player_animation()
         # display player
         screen.blit(player_surface, player_rect)
 
@@ -310,7 +342,7 @@ while True:
         # return player_rect to start position
         player_rect.midbottom = (80, 300)
         player_gravity = 0
-        
+
 
 
         # draw screen
