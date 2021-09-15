@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 import math
+from random import randint
 
 
 # function to consistantly update and redraw score_surface
@@ -12,8 +13,15 @@ def display_score():
     return current_time
 
 
+def obstacle_movement(obstacle_list):
+    if obstacle_list:
+        for obstacle_rect in obstacle_list:
+            obstacle_rect.x -= 5
 
+            screen.blit(snail_surface, obstacle_rect)
 
+        return obstacle_list
+    return []
 
 # initialize pygame
 pygame.init()
@@ -70,12 +78,18 @@ ground_surface = pygame.image.load('img/ground.png').convert()
 # score_pos_y = 27
 # score_rect = score_surface.get_rect(midtop = (score_pos_x, score_pos_y))
 
+# obstacles
 # create snail character(surface)
 snail_surface = pygame.image.load("img/snail/snail1.png").convert_alpha()
 snail_pos_x = 600
 snail_pos_y = 300
 # create snail rectangle that is same size as snail_surface
 snail_rect = snail_surface.get_rect(midbottom = (snail_pos_x, snail_pos_y))
+
+obstacle_rect_list = []
+
+
+
 
 # create player character(surface)
 player_surface = pygame.image.load("img/player/player_walk_1.png").convert_alpha()
@@ -108,6 +122,11 @@ game_name_rect = game_name.get_rect(center = (400, 80))
 game_msg = test_font.render("Press space to run", False, (111, 196, 169))
 game_msg_rect = game_msg.get_rect(center = (400, 330))
 
+# timer
+obstacle_timer = pygame.USEREVENT + 1
+event_to_trigger = obstacle_timer
+how_often_to_trigger = 900
+pygame.time.set_timer(event_to_trigger, how_often_to_trigger)
 
 
 
@@ -116,11 +135,12 @@ game_msg_rect = game_msg.get_rect(center = (400, 330))
 # game loop
 while True:
     for event in pygame.event.get():
+        # if user clicks the window close button
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+
         if game_active:
-            # if user clicks the window close button
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
             # if the mouse moves the terminal will output the mouse position 
             # if event.type == pygame.MOUSEMOTION:
             #     print(event.pos)
@@ -154,16 +174,23 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if player_rect.collidepoint(event.pos) and player_rect.bottom >= 300:
                     player_gravity = -20
+
+            # enemy/obstacle deployment timer 
+            if event.type == obstacle_timer:
+                obstacle_rect_list.append(snail_surface.get_rect(bottomright = (randint(900, 1100), 300)))
+
+
+
+
         else:
-            # if user clicks the window close button
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
             # user presses space bar to restart game
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     game_active = True
                     snail_rect.left = 800
                     start_time = pygame.time.get_ticks()
+        
+
+
 
 
     if game_active:
@@ -197,19 +224,16 @@ while True:
         # store score and display
         score = display_score()
 
+        # # display snail/move position
+        # snail_rect.left -= 3
+        # if snail_rect.right < 0:
+        #     snail_rect.left = 800
+        # screen.blit(snail_surface, snail_rect)
+
+        # obstacle movement
+        obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
 
-
-
-
-
-
-
-        # display snail/move position
-        snail_rect.left -= 3
-        if snail_rect.right < 0:
-            snail_rect.left = 800
-        screen.blit(snail_surface, snail_rect)
 
         # apply player gravity physics
         player_gravity +=1 
@@ -269,10 +293,10 @@ while True:
     else:
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
-
         score_msg = test_font.render(f"Your score: {math.floor(score)}", False, (111, 196, 169))
         score_msg_rect = score_msg.get_rect(center = (400, 330))
         screen.blit(game_name, game_name_rect)
+        # if no score prompt to start game, if score display score
         if score == 0:
             screen.blit(game_msg, game_msg_rect)
         else:
